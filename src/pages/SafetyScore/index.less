@@ -1,0 +1,373 @@
+.wrapper {
+  display: flex;
+  // height: 100vh;
+  min-height: calc(100vh - 0.1rem);
+  padding: 60px;
+  background-color: #f1f2f5;
+  .guide {
+    position: relative;
+    flex: 1;
+    background: url('../../../public/assets/guide-bg.png') no-repeat center/60% 100%;
+    .logoWrapper {
+      .logo {
+        width: 5rem;
+        height: auto;
+      }
+    }
+    .guideSteps {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      .stepImage {
+        margin: 30px;
+        img {
+          width: 7rem;
+        }
+      }
+      .imageCanClick {
+        cursor: pointer;
+      }
+    }
+    .copyRight {
+      margin-top: 2rem;
+      font-weight: 500;
+      font-size: 13px;
+      line-height: 20px;
+      letter-spacing: 1px;
+      text-align: left;
+      .projectName {
+        font-weight: 700;
+      }
+    }
+  }
+  .content {
+    flex: 3;
+    padding: 10px;
+    background-color: #fff;
+    .dashboardHeader {
+      .title {
+        font-weight: 500;
+        font-size: 48px;
+        line-height: 52px;
+        letter-spacing: 1px;
+        text-align: left;
+      }
+      p::before {
+        display: block;
+        width: 40px;
+        height: 4px;
+        margin-bottom: 30px;
+        background-color: black;
+        content: '';
+      }
+      p::after {
+        position: relative;
+        left: -50px;
+        display: block;
+        width: calc(100% + 50px);
+        height: 4px;
+        margin-top: 60px;
+        margin-bottom: 30px;
+        background-color: black;
+        content: '';
+      }
+      .paragraph {
+        font-weight: 500;
+        font-size: 20px;
+        font-family: Lato;
+        line-height: 26px;
+        letter-spacing: 1px;
+        text-align: left;
+      }
+    }
+    .uploadFile {
+      margin-left: 20px;
+      &_title {
+        font-weight: 650;
+        font-size: 20px;
+        line-height: 40px;
+        letter-spacing: 4px;
+        text-align: left;
+      }
+      .fileList {
+        margin-bottom: 10px;
+        padding: 2px;
+        font-weight: 600;
+        font-size: 16px;
+        .fileName {
+          font-weight: 800;
+          font-size: 16px;
+        }
+        .fileSize {
+          margin-left: 20px;
+          font-weight: 800;
+          font-size: 16px;
+        }
+        .schema {
+          &_content {
+            table {
+              width: 100%;
+              border: 1px solid #000;
+              border-collapse: collapse;
+            }
+            th,
+            td {
+              padding: 8px;
+              text-align: left;
+              background-color: #f2f2f2;
+              border: 1px solid #000;
+            }
+
+            th {
+              background-color: #f2f2f2;
+            }
+          }
+        }
+      }
+      .uploadButtons {
+        display: flex;
+        .browserAll {
+          margin-right: 10px;
+        }
+        .customUpload {
+          margin-right: 10px;
+          font-weight: 900;
+          font-size: 20px;
+          line-height: 26px;
+          letter-spacing: 4px;
+          text-align: left;
+          .customIconButton {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 60px;
+            background: #6cf96a;
+            border-radius: 5px;
+            .buttonContent {
+              display: flex;
+              align-items: center;
+              font-weight: 650;
+              font-size: 20px;
+              line-height: 26px;
+              letter-spacing: 4px;
+              text-align: left;
+            }
+            .iconWrapper {
+              width: 36px;
+              height: 36px;
+              background-image: url('../../../public/assets/arrow-jumping.png');
+              background-repeat: no-repeat;
+              background-position: center;
+              background-size: 24px 24px;
+            }
+          }
+        }
+      }
+    }
+    .displayWrapper {
+      display: flex;
+      margin-top: 30px;
+      .safetyScoreChart {
+        width: 70%;
+        height: 29rem;
+        padding: 10px;
+        .simulatorTitle {
+          font-weight: 900;
+          font-size: 20px;
+          line-height: 22px;
+          letter-spacing: 2px;
+          text-align: left;
+        }
+        .simulatorContainer {
+          width: 60%;
+          margin-top: 20px;
+          padding-left: 10px;
+          .simulatorCount {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+            .eventLabel {
+              font-weight: 600;
+              font-size: 16px;
+              line-height: 22px;
+              text-align: left;
+            }
+          }
+        }
+      }
+      .disCountWrapper {
+        width: 25%;
+        height: 26rem;
+        .avgScore {
+          margin-bottom: 8px;
+          .avgScoreTitle {
+            font-weight: 900;
+            font-size: 14px;
+          }
+          .avgScoreData {
+            color: red;
+          }
+        }
+        .discountContainer {
+          position: relative;
+          height: 90%;
+          padding: 10px;
+          border: 2px solid #cfd0d5;
+        }
+        .title {
+          font-weight: 900;
+          font-size: 1.2rem;
+          line-height: 22px;
+          letter-spacing: 2px;
+          text-align: left;
+        }
+        .disCount {
+          margin-top: 10px;
+          margin-bottom: 5px;
+          padding: 10px;
+          font-weight: 900;
+          font-size: 150%;
+          line-height: 22px;
+          letter-spacing: 2px;
+          text-align: left;
+          border: 2px solid #cfd0d5;
+        }
+        .sVersion {
+          position: absolute;
+          bottom: 10px;
+        }
+      }
+      .permiumSimulatorWrapper {
+        width: 100%;
+        .premiumSimulatorContainer {
+          display: flex;
+          height: 23rem;
+          .scoreContainer {
+            width: 45%;
+            margin-right: 15px;
+            .safetyScore {
+              display: flex;
+              justify-content: space-between;
+              margin-top: 15px;
+              padding: 10px;
+              border: 2px solid #cfd0d5;
+              .eventLabel {
+                font-weight: 600;
+                font-size: 16px;
+                line-height: 22px;
+                text-align: left;
+              }
+            }
+            .profile {
+              height: 16rem;
+              margin-top: 20px;
+              padding: 10px;
+              border: 2px solid #cfd0d5;
+              .eventLabel {
+                font-weight: 600;
+                font-size: 17px;
+                line-height: 22px;
+              }
+            }
+            .profilePremium {
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              margin-top: 18px;
+              padding-bottom: 10px;
+              font-weight: 600;
+              font-size: 16px;
+              line-height: 22px;
+              border-bottom: 1px solid #cfd0d5;
+              .label {
+                text-align: left;
+              }
+              .value {
+                text-align: right;
+              }
+            }
+          }
+          .premiumContainer {
+            width: 45%;
+            height: 20.7rem;
+            margin-top: 15px;
+            padding: 10px;
+            padding-bottom: 5px;
+            border: 2px solid #cfd0d5;
+            .premiumPrice {
+              padding: 15px;
+              font-weight: 600;
+              font-size: 17px;
+              line-height: 22px;
+              .priceContaniner {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                margin-bottom: 18px;
+                padding-bottom: 10px;
+                font-weight: 600;
+                font-size: 16px;
+                border-bottom: 1px solid #cfd0d5;
+                .label {
+                  text-align: left;
+                }
+                .value {
+                  text-align: right;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  .redText {
+    color: red;
+  }
+  .greenText {
+    color: green;
+  }
+  .eventLabel {
+    font-weight: 600;
+    font-size: 17px;
+    line-height: 22px;
+  }
+
+  .commonBtn {
+    font-weight: 900;
+    font-size: 20px;
+    line-height: 26px;
+    letter-spacing: 4px;
+    text-align: left;
+    .commonIconButton {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 45px;
+      background: #6cf96a;
+      border-radius: 5px;
+      .commonButtonContent {
+        display: flex;
+        align-items: center;
+        font-weight: 650;
+        font-size: 20px;
+        line-height: 26px;
+        letter-spacing: 4px;
+        text-align: left;
+      }
+      .iconWrapper {
+        width: 36px;
+        height: 36px;
+        background-image: url('../../../public/assets/arrow-jumping.png');
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: 24px 24px;
+      }
+    }
+  }
+  .safetyScoreTitle {
+    font-weight: 700;
+    font-size: 16px;
+  }
+}
