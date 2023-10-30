@@ -1,7 +1,7 @@
 import { request } from 'umi';
 import type { SimulatorData } from './type';
 
-export const baseUrl = 'http://ec2d-autodenalientitysvc-01.mypna.com:7777';
+export const baseUrl = 'https://sss-backend.novo.us';
 
 export async function fetchDiscount(avg_score: number) {
   return request(`${baseUrl}/api/get_discount?safety_score=${avg_score}`);
@@ -9,16 +9,17 @@ export async function fetchDiscount(avg_score: number) {
 
 export async function fetchSimulator(simulator: SimulatorData) {
   return request(
-    `${baseUrl}/api/get_safety_score?trip_mileage=${simulator.vehicle_mileage}&hb_count=${simulator.hb_count}&ha_count=${simulator.ha_count}&sp_distance_above_85=${simulator.sp_distance_above_85}&duration_days=${simulator.driving_calender_days}`,
+    `${baseUrl}/api/get_safety_score?trip_mileage=${simulator.vehicle_mileage}&hb_count=${simulator.hb_count}&ha_count=${simulator.ha_count}&sp_distance_above_85=${simulator.sp_distance_above_85}`,
+    { skipErrorHandler: true },
   );
 }
 
 export async function fetchScoreFactor() {
-  return request(`${baseUrl}/api/get_safety_score_factors`);
+  return request(`${baseUrl}/api/get_safety_score_factors`, { skipErrorHandler: true });
 }
 
 export async function fetchDownloadScoreFactor() {
-  return request(`${baseUrl}/api/download`);
+  return request(`${baseUrl}/api/download`, { skipErrorHandler: true });
 }
 
 export async function fetchPremiumData(file: any, score: number) {
@@ -28,5 +29,6 @@ export async function fetchPremiumData(file: any, score: number) {
   return request(`${baseUrl}/api/get_premium`, {
     method: 'POST',
     data: formData,
+    skipErrorHandler: true,
   });
 }

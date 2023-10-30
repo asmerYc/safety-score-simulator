@@ -175,7 +175,7 @@ export default function Index() {
 
   // download score factor
   const getDownload = () => {
-    window.open('http://ec2d-autodenalientitysvc-01.mypna.com:7777/api/download'); // new window open
+    window.open('https://sss-backend.novo.us/api/download'); // new window open
   };
 
   useEffect(() => {
