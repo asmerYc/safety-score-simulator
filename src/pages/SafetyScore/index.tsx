@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import styles from './index.less';
+import styles from './styles/index.less';
 import { Button, Upload, message, Spin, InputNumber, Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { LoadingOutlined } from '@ant-design/icons';

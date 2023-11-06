@@ -6,3 +6,8 @@ export type SimulatorData = {
   vehicle_mileage?: number;
   vehicle_safety_score?: number;
 };
+
+export type FileDatas = {
+  fileName: string;
+  fileSize: number;
+};
