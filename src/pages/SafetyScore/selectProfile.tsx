@@ -1,39 +1,36 @@
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react/self-closing-comp */
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './styles/index.less';
 import type { UploadProps } from 'antd';
 import { baseUrl } from '../../services/safety-score/api';
 import { useHistory, useLocation } from 'react-router-dom';
 import { Button, Upload, message } from 'antd';
-import type { SimulatorData } from '../../services/safety-score/type';
-
-interface RouteState {
-  fileData: { fileName: string; fileSize: number };
-  fileHeaderList: string[];
-}
-
-type DailyScoreItem = {
-  start_date: string;
-  daily_score: number;
-};
+import type {
+  SimulatorData,
+  DailyScoreItem,
+  RouteState,
+  FileDatas,
+} from '../../services/safety-score/type';
 
 function SelectProfile(props: any) {
   const location = useLocation();
+  const { fileData, fileHeaderList, lastestDayData, simulatorData, ssVersion, dailyScore } =
+    location.state as RouteState;
 
   const history = useHistory();
 
-  const [lastestDayData, setLastestDayData] = useState<DailyScoreItem>();
-  const [simulatorData, setSimulatorData] = useState<SimulatorData>({
-    vehicle_mileage: 0,
-    hb_count: 0,
-    ha_count: 0,
-    sp_distance_above_85: 0,
-    driving_calender_days: 0,
-  });
-  const [ssVersion, setSsVersion] = useState(0);
-  const [dailyScore, setDailyScore] = useState<DailyScoreItem[]>([]);
+  const [curFile, setCurFile] = useState<FileDatas>(fileData);
+  const [curHeaderList, setCurHeaderList] = useState<string[]>(fileHeaderList);
+  const [curLastestDayData, setCurLastestDayData] = useState<DailyScoreItem>(
+    lastestDayData as DailyScoreItem,
+  );
+  const [curSimulatorData, setCurSimulatorData] = useState<SimulatorData>(
+    simulatorData as SimulatorData,
+  );
+  const [curSsVersion, setCurSsVersion] = useState(ssVersion);
+  const [curDailyScore, setCurDailyScore] = useState<DailyScoreItem[]>(dailyScore);
 
   const { onLoadingChange } = props;
 
@@ -53,6 +50,8 @@ function SelectProfile(props: any) {
     return isAllowedType;
   };
 
+  useEffect(() => {}, []);
+
   const uploadProps: UploadProps = {
     name: 'file',
     action: `${baseUrl}/upload`,
@@ -70,21 +69,17 @@ function SelectProfile(props: any) {
         onLoadingChange(false);
         const { daily_summary, vehicle_summary, uploaded_csv_tab, safety_score_version } =
           info.file.response;
-        setSsVersion(safety_score_version);
-        setSimulatorData({
+        setCurSsVersion(safety_score_version);
+        setCurSimulatorData({
           ...vehicle_summary,
         });
-        setDailyScore(daily_summary);
-        setLastestDayData(daily_summary.slice(-1)[0]);
-        const fileData = {
+        setCurDailyScore(daily_summary);
+        setCurLastestDayData(daily_summary.slice(-1)[0]);
+        setCurFile({
           fileName: info.file.name,
           fileSize: info.file.size as number,
-        };
-        const fileHeaderList = uploaded_csv_tab;
-        history.push({
-          pathname: '/safetyScore/selectProfile',
-          state: { fileData, fileHeaderList },
         });
+        setCurHeaderList(uploaded_csv_tab);
       } else if (info.file.status === 'error') {
         onLoadingChange(false);
         message.error(`${info.file.response.error}`);
@@ -92,10 +87,8 @@ function SelectProfile(props: any) {
     },
   };
 
-  const { fileData, fileHeaderList } = location.state as RouteState;
-
   const Tables = () => {
-    const tableData = [fileHeaderList];
+    const tableData = [curHeaderList];
 
     const tableRows = tableData?.map((rowData, rowIndex) => (
       <tr key={rowIndex}>
@@ -115,7 +108,12 @@ function SelectProfile(props: any) {
   const handleSubmit = () => {
     history.push({
       pathname: '/safetyScore/scoreHistogram',
-      state: { simulatorData, lastestDayData, ssVersion, dailyScore },
+      state: {
+        simulatorData: curSimulatorData,
+        lastestDayData: curLastestDayData,
+        ssVersion: curSsVersion,
+        dailyScore: curDailyScore,
+      },
     });
   };
   return (
@@ -123,9 +121,9 @@ function SelectProfile(props: any) {
       <p className={styles.uploadFile_title}>{'File Selected'}</p>
       <div className={styles.fileList}>
         <span className={styles.fileName}>FileName ：</span>
-        {`[ ${fileData.fileName} ]`}
+        {`[ ${curFile?.fileName} ]`}
         <span className={styles.fileSize}>FileSize ：</span>
-        {`${(fileData.fileSize / 1024).toFixed(0)}（KB）`}
+        {`${(curFile?.fileSize / 1024).toFixed(0)}（KB）`}
         <div className={styles.schema}>
           <span className={styles.fileName}>Schema</span>
           <div className={styles.schema_content}>

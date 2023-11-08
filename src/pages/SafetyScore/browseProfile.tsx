@@ -6,7 +6,8 @@ import styles from './styles/index.less';
 import type { UploadProps } from 'antd';
 import { baseUrl } from '../../services/safety-score/api';
 import { useHistory, useLocation } from 'react-router-dom';
-import type { SimulatorData } from '../../services/safety-score/type';
+import { initialFileData } from '../../services/safety-score/api';
+import type { SimulatorData, RouteState } from '../../services/safety-score/type';
 
 type DailyScoreItem = {
   start_date: string;
@@ -29,9 +30,7 @@ function BrowserProfile(props: any) {
   const [ssVersion, setSsVersion] = useState(0);
   const [dailyScore, setDailyScore] = useState<DailyScoreItem[]>([]);
 
-  useEffect(() => {
-    console.log('1111');
-  }, [location.pathname]);
+  useEffect(() => {}, [location.pathname]);
 
   const checkFileType = (file: any) => {
     const allowedTypes = [
@@ -76,9 +75,25 @@ function BrowserProfile(props: any) {
           fileSize: info.file.size as number,
         };
         const fileHeaderList = uploaded_csv_tab;
+        const customData: RouteState = {
+          simulatorData: vehicle_summary,
+          lastestDayData: daily_summary.slice(-1)[0],
+          ssVersion: safety_score_version,
+          dailyScore: daily_summary,
+          fileData,
+          fileHeaderList,
+        };
+        initialFileData(customData);
         history.push({
           pathname: '/safetyScore/selectProfile',
-          state: { fileData, fileHeaderList, simulatorData, lastestDayData, ssVersion, dailyScore },
+          state: {
+            fileData,
+            fileHeaderList,
+            simulatorData: vehicle_summary,
+            lastestDayData: daily_summary.slice(-1)[0],
+            ssVersion: safety_score_version,
+            dailyScore: daily_summary,
+          },
         });
 
         console.log(info.file.response, 'info.file.response');

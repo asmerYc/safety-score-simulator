@@ -7,13 +7,23 @@ import { useLocation, useHistory } from 'react-router-dom';
 import { baseUrl } from '../../services/safety-score/api';
 import * as echarts from 'echarts';
 import { Button, Upload, message } from 'antd';
+import type { SimulatorData } from '../../services/safety-score/type';
+
+type DailyScoreItem = {
+  start_date: string;
+  daily_score: number;
+};
 
 function ScoreHistogram(props: any) {
   const location = useLocation();
-  console.log(location.state, 'location.state');
-  const [discout, setDisount] = useState(0);
-  const { onLoadingChange } = props;
   const { simulatorData, lastestDayData, ssVersion, dailyScore } = location.state as any;
+
+  const [discount, setDiscount] = useState(0);
+  const [shLastestDayData, setShLastestDayData] = useState<DailyScoreItem>(lastestDayData);
+  const [shSimulatorData, setShSimulatorData] = useState<SimulatorData>(simulatorData);
+  const [shSsVersion, setShSsVersion] = useState(ssVersion);
+  const [shDailyScore, setShDailyScore] = useState<DailyScoreItem[]>(dailyScore);
+  const { onLoadingChange } = props;
 
   const history = useHistory();
 
@@ -22,7 +32,7 @@ function ScoreHistogram(props: any) {
     onLoadingChange(true);
     fetchDiscount(avg_score)
       .then((data) => {
-        setDisount(data.discount_rate);
+        setDiscount(data.discount_rate);
         onLoadingChange(false);
       })
       .catch((error) => {
@@ -64,6 +74,12 @@ function ScoreHistogram(props: any) {
         onLoadingChange(false);
         const { daily_summary, vehicle_summary, uploaded_csv_tab, safety_score_version } =
           info.file.response;
+        setShSsVersion(safety_score_version);
+        setShSimulatorData({
+          ...vehicle_summary,
+        });
+        setShDailyScore(daily_summary);
+        setShLastestDayData(daily_summary.slice(-1)[0]);
         const fileData = {
           fileName: info.file.name,
           fileSize: info.file.size as number,
@@ -71,10 +87,15 @@ function ScoreHistogram(props: any) {
         const fileHeaderList = uploaded_csv_tab;
         history.push({
           pathname: '/safetyScore/selectProfile',
-          state: { fileData, fileHeaderList },
+          state: {
+            fileData,
+            fileHeaderList,
+            lastestDayData: daily_summary.slice(-1)[0],
+            simulatorData: vehicle_summary,
+            ssVersion: safety_score_version,
+            dailyScore: daily_summary,
+          },
         });
-
-        console.log(info.file.response, 'info.file.response');
       } else if (info.file.status === 'error') {
         onLoadingChange(false);
         message.error(`${info.file.response.error}`);
@@ -82,7 +103,19 @@ function ScoreHistogram(props: any) {
     },
   };
 
-  const safetyScoreClick = () => {};
+  const safetyScoreClick = () => {
+    console.log(shSimulatorData, 'shSimulatorData++++');
+    history.push({
+      pathname: '/safetyScore/scoreSimulator',
+      state: {
+        lastestDayData: shLastestDayData,
+        simulatorData: shSimulatorData,
+        ssVersion: shSsVersion,
+        dailyScore: shDailyScore,
+        discount,
+      },
+    });
+  };
   useEffect(() => {
     getDiscount(simulatorData.vehicle_safety_score);
     const initializeChart = async () => {
@@ -162,22 +195,22 @@ function ScoreHistogram(props: any) {
               <span className={styles.title}>AVG.SAFETY SCORE</span>
               <div
                 className={`${styles.disCount} ${
-                  Number(simulatorData.vehicle_safety_score.toFixed(2)) >= 0
+                  Number(simulatorData?.vehicle_safety_score?.toFixed(2)) >= 0
                     ? styles.greenText
                     : styles.redText
                 }`}
               >
-                {simulatorData.vehicle_safety_score.toFixed(2)}
+                {simulatorData?.vehicle_safety_score?.toFixed(2)}
               </div>
             </div>
             <div>
               <span className={styles.title}>DISCOUNT</span>
               <div
                 className={`${styles.disCount} ${
-                  1 - discout >= 0 ? styles.greenText : styles.redText
+                  1 - discount >= 0 ? styles.greenText : styles.redText
                 }`}
               >
-                {((1 - discout) * 100).toFixed(1)} %
+                {((1 - discount) * 100)?.toFixed(1)} %
               </div>
             </div>
             {/* ss Version */}
@@ -190,7 +223,12 @@ function ScoreHistogram(props: any) {
       <div className={styles.uploadFile}>
         <div className={styles.uploadButtons}>
           <div className={styles.browserAll}>
-            <Upload {...props} className={styles.customUpload} maxCount={1} showUploadList={false}>
+            <Upload
+              {...uploadProps}
+              className={styles.customUpload}
+              maxCount={1}
+              showUploadList={false}
+            >
               <Button className={styles.customIconButton}>
                 <span className={styles.buttonContent}>{'BROWSE AGAIN'}</span>
                 <span className={styles.iconWrapper}></span>
